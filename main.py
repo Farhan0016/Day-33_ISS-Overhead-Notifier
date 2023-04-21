@@ -1,3 +1,9 @@
+# To run and test the code you need to update 4 places:
+# 1. Change MY_EMAIL/MY_PASSWORD to your own details.
+# 2. Change MY_LAT/MY_LONG to your current location. latlong.net
+# 3. Go to your email provider and make it allow less secure apps.
+# 4. Update the SMTP ADDRESS to match your email provider.
+
 import requests
 from datetime import datetime
 from email.message import EmailMessage
@@ -5,8 +11,8 @@ import ssl
 import smtplib
 import time
 
-MY_EMAIL = "from.muhammadfarhan@gmail.com"
-MY_PASSWORD = "wcwplcwwvrqitngr"
+MY_EMAIL = "YOUR EMAIL"
+MY_PASSWORD = "YOUR PASSWORD"
 MY_LAT = 26.245609  # Your latitude
 MY_LONG = 68.406731  # Your longitude
 
@@ -37,8 +43,7 @@ def is_night():
     time_now = datetime.now().hour
 
     if time_now >= sunset or time_now <= sunrise:
-        # IT's Dark
-        return True
+        return True  # IT's Dark
 
 while True:
     # If the ISS is close to my current position
@@ -47,7 +52,7 @@ while True:
     if is_overhead() and is_night():
         msg = EmailMessage()
         msg['From'] = MY_EMAIL
-        msg['To'] = "malikfarhan57@outlook.com"
+        msg['To'] = MY_EMAIL
         msg['Subject'] = "Look Up👆"
         body = """
         Hey!
@@ -55,7 +60,7 @@ while True:
         """
         msg.set_content(body)
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", context=context) as connection:
+        with smtplib.SMTP_SSL("YOUR EMAIL PROVIDER SMTP SERVER ADDRESS", context=context) as connection:
             connection.login(user=MY_EMAIL, password=MY_PASSWORD)
             connection.sendmail(
                 from_addr=MY_EMAIL,
@@ -63,4 +68,3 @@ while True:
                 msg=msg.as_string()
             )
         time.sleep(60)
-    # BONUS: run the code every 60 seconds.
